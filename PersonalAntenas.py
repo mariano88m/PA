@@ -16,9 +16,6 @@ class PersonalAntenas:
         self.CellLatitud = CellLatitud
         self.CellLongitud = CellLongitud
 
-
-
-
     def __str__(self):
         return f' {self.CruceID} \t  {self.CellID} \t {self.Empresa} \t {self.CellDireccion} \t {self.CellNum} \t {self.CellLocalidad} \t {self.CellProvincia}\t {self.CellRadio} \t {self.CellAzimuth} \t {self.CellLatitud}\t {self.CellLongitud}'
 
@@ -41,15 +38,14 @@ for path in xls_filenames:
         print("Read OK")
 
         df.dropna(inplace=True)
-        #for i in range(2, len(df)):
         for i in range(2, len(df)):
             try:
 
-                aux = str(df.iloc[i, 2]) + " " + str(df.iloc[i, 1]) + ", " + str(df.iloc[i, 3])
+                aux = str(df.iloc[i, 1]) + " " + str(df.iloc[i, 2]) + ", " + str(df.iloc[i, 3])
                 location = geolocator.geocode(aux, timeout=None)
 
-                p1 = PersonalAntenas('1', df.iloc[i, 0], 'Personal', aux,"","", location.latitude, location.longitude, " ",
-                                     df.iloc[i, 6], df.iloc[i, 5])
+                p1 = PersonalAntenas('1', df.iloc[i, 0], 'Personal', aux, location.latitude, location.longitude, " ",
+                                     df.iloc[i, 6], df.iloc[i, 5],"","")
                 myList.append(p1)
             except:
                 pass
