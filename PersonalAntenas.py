@@ -16,8 +16,11 @@ class PersonalAntenas:
         self.CellLatitud = CellLatitud
         self.CellLongitud = CellLongitud
 
+
+
+
     def __str__(self):
-        return f' {self.CellID} \t {self.CellDireccion} \t {self.CellNum}\t {self.CellLocalidad}\t {self.CellProvincia}\t {self.CellRadio} \t {self.CellAzimuth} \t {self.CellLatitud}\t {self.CellLongitud}'
+        return f' {self.CruceID} \t  {self.CellID} \t {self.Empresa} \t {self.CellDireccion} \t {self.CellNum} \t {self.CellLocalidad} \t {self.CellProvincia}\t {self.CellRadio} \t {self.CellAzimuth} \t {self.CellLatitud}\t {self.CellLongitud}'
 
 geolocator = Bing(api_key='AmNF9w5RcCH2SPYsP0RPiC-sclj4vW1sqEsfLy05rMKpPmqrQsjUzDZYZrB-Kntn')
 
@@ -28,7 +31,7 @@ filenames = os.listdir(directory_path)
 xls_filenames = [f for f in filenames if f.endswith('.xls')]
 
 # create an empty list to store the dataframes
-myList = ['Cell ID \t Celda Direccion \t Celda Num \t Celda Localidad \t Celda Provincia \t Radio Cobertura (en KM) \t Azimuth \t Latitud \t Longitud']
+myList = ['Cruce \t Codigo \t Empresa \t Direccion \t Latitud \t Longitud \t Rango \t Azimuth \t Cobertura ']
 
 dfAux=[]
 # iterate over the file paths and read each file as a dataframe
@@ -40,17 +43,20 @@ for path in xls_filenames:
         df.dropna(inplace=True)
         #for i in range(2, len(df)):
         for i in range(2, len(df)):
+            try:
 
-            aux = str(df.iloc[i, 2]) + " " + str(df.iloc[i, 1]) + ", " + str(df.iloc[i, 3])
-            location = geolocator.geocode(aux, timeout=None)
-            p1 = PersonalAntenas(df.iloc[i, 0], df.iloc[i, 1], df.iloc[i, 2], df.iloc[i, 3], df.iloc[i, 4],
-                                 df.iloc[i, 5], df.iloc[i, 6], location.latitude, location.longitude)
-            myList.append(p1)
+                aux = str(df.iloc[i, 2]) + " " + str(df.iloc[i, 1]) + ", " + str(df.iloc[i, 3])
+                location = geolocator.geocode(aux, timeout=None)
 
+                p1 = PersonalAntenas('1', df.iloc[i, 0], 'Personal', aux,"","", location.latitude, location.longitude, " ",
+                                     df.iloc[i, 6], df.iloc[i, 5])
+                myList.append(p1)
+            except:
+                pass
         print("OK")
 
     except:
         print("Something went wrong")
 
 dfAux = pd.DataFrame(myList)
-dfAux.to_csv('my_list.csv', index=False)
+dfAux.to_excel('my_list.xls', index=False)
