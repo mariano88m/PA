@@ -35,8 +35,6 @@ dfAux=[]
 for path in xls_filenames:
     try:
         df = pd.read_excel(path, sheet_name='Datos Tecnicos')
-        print("Read OK")
-
         df.dropna(inplace=True)
         for i in range(2, len(df)):
             try:
@@ -49,8 +47,6 @@ for path in xls_filenames:
                 myList.append(p1)
             except:
                 pass
-        print("OK")
-
     except:
         print("Something went wrong")
 
